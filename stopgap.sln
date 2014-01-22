@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "stopgap", "stopgap.vcxproj", "{F8B3905F-AA13-48E4-8DFC-854F0F21013B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{55E2B3AE-3CA1-4DB6-97F7-0A044D6F446F} = {55E2B3AE-3CA1-4DB6-97F7-0A044D6F446F}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libtcmalloc_minimal", "..\gperftools-2.1\vsprojects\libtcmalloc_minimal\libtcmalloc_minimal.vcxproj", "{55E2B3AE-3CA1-4DB6-97F7-0A044D6F446F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F8B3905F-AA13-48E4-8DFC-854F0F21013B}.Debug|x64.ActiveCfg = Debug|x64
+		{F8B3905F-AA13-48E4-8DFC-854F0F21013B}.Debug|x64.Build.0 = Debug|x64
+		{F8B3905F-AA13-48E4-8DFC-854F0F21013B}.Release|x64.ActiveCfg = Release|x64
+		{F8B3905F-AA13-48E4-8DFC-854F0F21013B}.Release|x64.Build.0 = Release|x64
+		{55E2B3AE-3CA1-4DB6-97F7-0A044D6F446F}.Debug|x64.ActiveCfg = Release|x64
+		{55E2B3AE-3CA1-4DB6-97F7-0A044D6F446F}.Debug|x64.Build.0 = Release|x64
+		{55E2B3AE-3CA1-4DB6-97F7-0A044D6F446F}.Release|x64.ActiveCfg = Release|x64
+		{55E2B3AE-3CA1-4DB6-97F7-0A044D6F446F}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

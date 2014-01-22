@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Headers">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="hp.hpp">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="zen\dbg.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="zen\ntfs.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="zen\ntndk.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="zen\prb.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="zen\version.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="zen\zenwinx.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="zen.hpp">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="util.hpp">
+      <Filter>Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="op.hpp">
+      <Filter>Headers</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="util.cpp" />
+    <ClCompile Include="zen.cpp" />
+    <ClCompile Include="op.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="stopgap.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="harddisk.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="dispatchpatch64.obj" />
+  </ItemGroup>
+</Project>

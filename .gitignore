@@ -1,0 +1,11 @@
+*.aps
+*.obj
+*.opensdf
+*.sdf
+*.suo
+*.user
+*.py
+Release/
+Debug/
+x64/
+ipch/
