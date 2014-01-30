@@ -10,8 +10,6 @@
 
 #include <boost/program_options.hpp>
 
-extern "C" int __intel_cpu_indicator;
-
 static void __cdecl progress(winx_file_info *f, uint64_t *count)
 {
   if (!(++*count % 13579)) {
@@ -364,11 +362,6 @@ void Operation::init(int argc, wchar_t **argv)
              << vol.info.bytes_per_cluster << util::clear << std::endl;
   std::wcout << std::setw(20) << std::left << L"Using max gap size: " <<
              util::light << vol(opts.maxSize) << util::clear << std::endl;
-#ifdef __INTEL_COMPILER
-  std::wcout << std::setw(20) << std::left << L"Using opt: " <<
-             util::light << std::hex << __intel_cpu_indicator << std::dec << std::fixed <<
-             util::clear << std::endl ;
-#endif
   std::wcout << std::endl;
 
   util::title << L"Enumerating files..." << std::flush;

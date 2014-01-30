@@ -11,27 +11,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="hp.hpp">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="zen\dbg.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="zen\ntfs.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="zen\ntndk.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="zen\prb.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="zen\version.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
-    <ClInclude Include="zen\zenwinx.h">
-      <Filter>Headers</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Headers</Filter>
     </ClInclude>

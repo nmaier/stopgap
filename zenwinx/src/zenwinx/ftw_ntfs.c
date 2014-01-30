@@ -206,7 +206,7 @@ static NTSTATUS get_file_record(ULONGLONG mft_id,
     IO_STATUS_BLOCK iosb;
     NTSTATUS status;
 
-    nfrib.FileReferenceNumber = mft_id;
+    nfrib.FileReferenceNumber.QuadPart = mft_id;
 
     /* required by x64 system, otherwise it trashes stack */
     RtlZeroMemory(nfrob,sp->ml.file_record_buffer_size);
@@ -418,7 +418,7 @@ static int get_number_of_file_records(mft_scan_parameters *sp)
         winx_free(nfrob);
         return (-1);
     }
-    if(GetMftIdFromFRN(nfrob->FileReferenceNumber) != FILE_MFT){
+    if(GetMftIdFromFRN(nfrob->FileReferenceNumber.QuadPart) != FILE_MFT){
         etrace("cannot get $Mft file record");
         winx_free(nfrob);
         return (-1);
@@ -652,7 +652,7 @@ static void analyze_attribute_from_mft_record(ULONGLONG mft_id,ATTRIBUTE_TYPE at
         /*sp->errors ++;*/
         return;
     }
-    if(GetMftIdFromFRN(nfrob->FileReferenceNumber) != mft_id){
+    if(GetMftIdFromFRN(nfrob->FileReferenceNumber.QuadPart) != mft_id){
         etrace("cannot get %I64u file record",mft_id);
         winx_free(nfrob);
         /*sp->errors ++;*/
@@ -1317,7 +1317,7 @@ static void analyze_file_record(NTFS_FILE_RECORD_OUTPUT_BUFFER *nfrob,
     */
     
     /* initialize mfi structure */
-    sp->mfi.BaseMftId = GetMftIdFromFRN(nfrob->FileReferenceNumber);
+    sp->mfi.BaseMftId = GetMftIdFromFRN(nfrob->FileReferenceNumber.QuadPart);
     sp->mfi.ParentDirectoryMftId = FILE_root;
     sp->mfi.Flags = 0x0;
     if(frh->Flags & 0x2)
@@ -1657,7 +1657,7 @@ fail:
         }
 
         /* analyze file record */
-        ret_mft_id = GetMftIdFromFRN(nfrob->FileReferenceNumber);
+        ret_mft_id = GetMftIdFromFRN(nfrob->FileReferenceNumber.QuadPart);
         //trace(D"NTFS record found, id = %I64u",ret_mft_id);
         analyze_file_record(nfrob,sp);
 

@@ -11,20 +11,18 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{F8B3905F-AA13-48E4-8DFC-854F0F21013B}</ProjectGuid>
-    <Keyword>Win32Proj</Keyword>
-    <RootNamespace>stopgap</RootNamespace>
-    <ProjectName>stopgap</ProjectName>
+    <ProjectGuid>{F91D5C67-7B47-46E3-B38B-F68F91DF0669}</ProjectGuid>
+    <RootNamespace>zenwinx</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>Intel C++ Compiler XE 14.0</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
@@ -41,93 +39,75 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LinkIncremental>true</LinkIncremental>
-    <IntDir>$(Platform)\Link\$(Configuration)\</IntDir>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LinkIncremental>false</LinkIncremental>
-    <IntDir>$(Platform)\Link\$(Configuration)\</IntDir>
-  </PropertyGroup>
+  <PropertyGroup />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>zenwinx\src\zenwinx\;C:\Boost\include\boost-1_55</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>kernel32.lib;user32.lib;ntdll.lib;version.lib;shlwapi.lib</AdditionalDependencies>
-      <UACExecutionLevel>HighestAvailable</UACExecutionLevel>
-      <AdditionalLibraryDirectories>C:\Boost\lib64;C:\WinDDK\7600.16385.1\lib\win7\amd64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <ForceSymbolReferences>_tcmalloc;%(ForceSymbolReferences)</ForceSymbolReferences>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <Optimization>Full</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>zenwinx\src\zenwinx\;C:\Boost\include\boost-1_55</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
       <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
       <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
       <OmitFramePointers>true</OmitFramePointers>
-      <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <StringPooling>true</StringPooling>
-      <InterproceduralOptimization>MultiFile</InterproceduralOptimization>
       <OptimizeForWindowsApplication>true</OptimizeForWindowsApplication>
       <UseIntelOptimizedHeaders>true</UseIntelOptimizedHeaders>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <AdditionalOptions>/QxSSE3 /QaxSSSE3,SSE4.1,SSE4.2,AVX %(AdditionalOptions)</AdditionalOptions>
-      <BufferSecurityCheck>false</BufferSecurityCheck>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>kernel32.lib;user32.lib;ntdll.lib;version.lib;shlwapi.lib</AdditionalDependencies>
-      <UACExecutionLevel>HighestAvailable</UACExecutionLevel>
-      <AdditionalLibraryDirectories>C:\Boost\lib64;C:\WinDDK\7600.16385.1\lib\win7\amd64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <ForceSymbolReferences>_tcmalloc;%(ForceSymbolReferences)</ForceSymbolReferences>
-      <SetChecksum>true</SetChecksum>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="op.cpp" />
-    <ClCompile Include="util.cpp" />
-    <ClCompile Include="zen.cpp" />
+    <ClInclude Include="include\dbg.h" />
+    <ClInclude Include="include\version.h" />
+    <ClInclude Include="src\zenwinx\case-tables.h" />
+    <ClInclude Include="src\zenwinx\ntfs.h" />
+    <ClInclude Include="src\zenwinx\ntndk.h" />
+    <ClInclude Include="src\zenwinx\prb.h" />
+    <ClInclude Include="src\zenwinx\zenwinx.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\gperftools-2.1\vsprojects\libtcmalloc_minimal\libtcmalloc_minimal.vcxproj">
-      <Project>{55e2b3ae-3ca1-4db6-97f7-0a044d6f446f}</Project>
-    </ProjectReference>
-    <ProjectReference Include="zenwinx\zenwinx.vcxproj">
-      <Project>{f91d5c67-7b47-46e3-b38b-f68f91df0669}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="op.hpp" />
-    <ClInclude Include="resource.h" />
-    <ClInclude Include="util.hpp" />
-    <ClInclude Include="zen.hpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="stopgap.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="harddisk.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Object Include="dispatchpatch64.obj" />
+    <ClCompile Include="src\zenwinx\dbg.c" />
+    <ClCompile Include="src\zenwinx\entry.c" />
+    <ClCompile Include="src\zenwinx\env.c" />
+    <ClCompile Include="src\zenwinx\event.c" />
+    <ClCompile Include="src\zenwinx\file.c" />
+    <ClCompile Include="src\zenwinx\ftw.c" />
+    <ClCompile Include="src\zenwinx\ftw_ntfs.c" />
+    <ClCompile Include="src\zenwinx\keyboard.c" />
+    <ClCompile Include="src\zenwinx\keytrans.c" />
+    <ClCompile Include="src\zenwinx\ldr.c" />
+    <ClCompile Include="src\zenwinx\list.c" />
+    <ClCompile Include="src\zenwinx\lock.c" />
+    <ClCompile Include="src\zenwinx\mem.c" />
+    <ClCompile Include="src\zenwinx\misc.c" />
+    <ClCompile Include="src\zenwinx\mutex.c" />
+    <ClCompile Include="src\zenwinx\path.c" />
+    <ClCompile Include="src\zenwinx\prb.c" />
+    <ClCompile Include="src\zenwinx\privilege.c" />
+    <ClCompile Include="src\zenwinx\reg.c" />
+    <ClCompile Include="src\zenwinx\stdio.c" />
+    <ClCompile Include="src\zenwinx\string.c" />
+    <ClCompile Include="src\zenwinx\thread.c" />
+    <ClCompile Include="src\zenwinx\time.c" />
+    <ClCompile Include="src\zenwinx\volume.c" />
+    <ClCompile Include="src\zenwinx\zenwinx.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

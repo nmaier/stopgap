@@ -30,6 +30,8 @@
 #ifndef _NTNDK_H_
 #define _NTNDK_H_
 
+#include <windows.h>
+
 /*
 * Extremely important notes for the 64-bit compilation.
 *
@@ -725,7 +727,9 @@ typedef struct _RTL_HEAP_DEFINITION {
 #define FSCTL_MOVE_FILE                 CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 29, METHOD_BUFFERED, FILE_SPECIAL_ACCESS) // MOVE_FILE_DATA,
 #define FSCTL_IS_VOLUME_DIRTY           CTL_CODE(FILE_DEVICE_FILE_SYSTEM, 30, METHOD_BUFFERED, FILE_ANY_ACCESS)
 
+#if 0
 #define VOLUME_IS_DIRTY  1
+#endif
 
 #define IOCTL_DISK_BASE                 FILE_DEVICE_DISK
 #define IOCTL_DISK_GET_DRIVE_GEOMETRY   CTL_CODE(IOCTL_DISK_BASE, 0x0000, METHOD_BUFFERED, FILE_ANY_ACCESS)
@@ -809,6 +813,7 @@ typedef struct _FILE_BOTH_DIRECTORY_INFORMATION {
 } FILE_BOTH_DIRECTORY_INFORMATION, *PFILE_BOTH_DIRECTORY_INFORMATION,
   FILE_BOTH_DIR_INFORMATION, *PFILE_BOTH_DIR_INFORMATION;
 
+#if 0
 typedef struct _PARTITION_INFORMATION {
     LARGE_INTEGER StartingOffset;
     LARGE_INTEGER PartitionLength;
@@ -856,6 +861,7 @@ typedef struct _DISK_GEOMETRY {
     DWORD SectorsPerTrack;
     DWORD BytesPerSector;
 } DISK_GEOMETRY;
+#endif
 
 typedef enum _SYSTEM_INFORMATION_CLASS {
     SystemBasicInformation = 0,

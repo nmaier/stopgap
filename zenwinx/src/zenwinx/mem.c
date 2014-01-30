@@ -29,7 +29,9 @@
 
 int default_killer(size_t n);
 
+#ifdef USE_HEAP
 HANDLE hGlobalHeap = NULL;
+#endif
 char *reserved_memory = NULL;
 winx_killer killer = default_killer;
 
@@ -69,6 +71,8 @@ void *winx_heap_alloc(size_t size,int flags)
 {
     void *p = NULL;
 
+#ifdef USE_HEAP
+
     /*
     * Avoid winx_dbg_xxx calls here
     * to avoid recursion.
@@ -83,6 +87,17 @@ void *winx_heap_alloc(size_t size,int flags)
         p = RtlAllocateHeap(hGlobalHeap,0,size);
         if(!p) if(!killer(size)) break;
     } while(!p);
+
+#else
+
+    if(!(flags & MALLOC_ABORT_ON_FAILURE))
+        return malloc(size);
+    do {
+        p = malloc(size);
+        if(!p) if(!killer(size)) break;
+    } while(!p);
+
+#endif
     
     return p;
 }
@@ -93,12 +108,21 @@ void *winx_heap_alloc(size_t size,int flags)
  */
 void winx_heap_free(void *addr)
 {
+#ifdef USE_HEAP
+
     /*
     * Avoid winx_dbg_xxx calls here
     * to avoid recursion.
     */
     if(hGlobalHeap && addr)
         (void)RtlFreeHeap(hGlobalHeap,0,addr);
+
+#else
+
+    if (addr)
+        (void)free(addr);
+
+#endif
 }
 
 /**
@@ -108,6 +132,7 @@ void winx_heap_free(void *addr)
  */
 int winx_create_global_heap(void)
 {
+#ifdef USE_HEAP
     /* create growable heap with initial size of 100 KB */
     if(hGlobalHeap == NULL){
         hGlobalHeap = RtlCreateHeap(HEAP_GROWABLE,NULL,0,100 * 1024,NULL,NULL);
@@ -121,6 +146,7 @@ int winx_create_global_heap(void)
     
     /* reserve 1 MB of memory for the out of memory condition handling */
     reserved_memory = (char *)winx_tmalloc(1024 * 1024);
+#endif
     return 0;
 }
 
@@ -130,10 +156,12 @@ int winx_create_global_heap(void)
  */
 void winx_destroy_global_heap(void)
 {
+#ifdef USE_HEAP
     if(hGlobalHeap){
         (void)RtlDestroyHeap(hGlobalHeap);
         hGlobalHeap = NULL;
     }
+#endif
 }
 
 /** @} */

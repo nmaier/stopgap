@@ -60,8 +60,6 @@ Notes
 * Should compile using the MSVC and Intel compilers.
   Tested MSVC 2012 and Intel 14. As such, StopGap only uses C++11
   features supported by said compilers.
-* You need to the same UltraDefrag version installed that StopGap links
-  against, or at least place the right zenwinx.dll in your local $PATH.
 * If you experience bugs, do not expect me to fix them! I probably
   won't. This whole project is not a fulfledged end-comsumer product
   anyway. Having said that, sane patches are certainly welcome.

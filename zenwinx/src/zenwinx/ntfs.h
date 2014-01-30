@@ -46,6 +46,9 @@
 #endif
 
 #pragma pack(push, 1)
+
+
+#if 0
 typedef struct {
     ULONGLONG FileReferenceNumber;
 } NTFS_FILE_RECORD_INPUT_BUFFER, *PNTFS_FILE_RECORD_BUFFER;
@@ -55,6 +58,7 @@ typedef struct {
     ULONG FileRecordLength;
     UCHAR FileRecordBuffer[1];
 } NTFS_FILE_RECORD_OUTPUT_BUFFER, *PNTFS_FILE_RECORD_OUTPUT_BUFFER;
+#endif
 
 /*
  * System files mft record numbers. All these files are always marked as used

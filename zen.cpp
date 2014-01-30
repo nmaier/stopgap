@@ -8,33 +8,6 @@
 #include <boost/multi_array.hpp>
 #include <boost/regex.hpp>
 
-#ifndef NO_PATCH
-#include "hp.hpp"
-
-extern "C" {
-  extern void *__imp_winx_heap_alloc;
-  static void *my_winx_heap_alloc(size_t size, int flags)
-  {
-    auto rv = malloc(size);
-    if (!rv) {
-      abort();
-    }
-    return rv;
-  }
-  extern void *__imp_winx_heap_free;
-  static void my_winx_heap_free(void *addr)
-  {
-    if (addr) {
-      free(addr);
-    }
-  }
-} // extern "C"
-
-HotPatch::function<void*(size_t, int)> malloc_;
-HotPatch::function<void(void *)> free_;
-
-#endif
-
 static const boost::wregex excluded(L":\\$|\\\\\\$|"
                                     L"\\\\(?:safeboot\\.fs$|Gobackio\\.bin$|PGPWDE|bootwiz|BootAuth.\\.sys|\\$dcsys\\$|bootstat\\.dat|bootsqm\\.dat)|"
                                     L":\\\\(?:io\\.sys|msdos\\.sys|ibmbio\\.com|ibmdos\\.com|drbios\\.sys)",
@@ -60,32 +33,10 @@ namespace zen
 winx::winx()
 {
   winx_init_library();
-
-#ifndef NO_PATCH
-  typedef void*(*pimp_winx_heap_alloc)(size_t, int);
-  auto imp_winx_heap_alloc = (pimp_winx_heap_alloc)
-                             __imp_winx_heap_alloc;
-  malloc_ = imp_winx_heap_alloc;
-  malloc_.SetPatch(my_winx_heap_alloc);
-  malloc_.ApplyPatch();
-
-  typedef void(*pimp_winx_heap_free)(void *);
-  auto imp_winx_heap_free = (pimp_winx_heap_free)__imp_winx_heap_free;
-  free_ = imp_winx_heap_free;
-  free_.SetPatch(my_winx_heap_free);
-  free_.ApplyPatch();
-#endif
-
 }
 
 winx::~winx()
 {
-
-#ifndef NO_PATCH
-  malloc_.RemovePatch();
-  free_.RemovePatch();
-#endif
-
   winx_unload_library();
 }
 
