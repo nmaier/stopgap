@@ -1,0 +1,9 @@
+-- this is the zenwinx library build options
+name        = "zenwinx"
+target_type = "dll"
+nativedll   = 1
+
+-- list of directories containing headers the library relies on
+includes = { "include", "zenwinx" }
+
+libs = { "ntdll" }
