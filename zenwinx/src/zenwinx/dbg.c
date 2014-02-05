@@ -460,6 +460,7 @@ static void remove_crlf(char *s)
     }
 }
 
+#ifdef USE_LOG
 /**
  * @brief Delivers a message to the Debug View
  * program and appends it to the log file as well.
@@ -571,7 +572,9 @@ no_description:
     winx_free(ext_msg);
     winx_free(cnv_msg);
 }
+#endif
 
+#ifdef USE_LOG
 /**
  * @brief Delivers a message to the Debug View
  * program and appends it to the log file as well.
@@ -642,6 +645,7 @@ void winx_dbg_print_header(char ch, int width, const char *format, ...)
         va_end(arg);
     }
 }
+#endif
 
 /**
  * @brief Appends all collected debugging

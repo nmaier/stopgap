@@ -105,8 +105,13 @@ void winx_set_dbg_log(wchar_t *path);
 
 void winx_flush_dbg_log(int flags);
 
+#ifdef USE_LOG
 void winx_dbg_print(int flags, const char *format, ...);
 void winx_dbg_print_header(char ch, int width, const char *format, ...);
+#else
+#define winx_dbg_print
+#define winx_dbg_print_header
+#endif
 
 /* env.c */
 wchar_t *winx_getenv(wchar_t *name);
