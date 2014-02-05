@@ -233,10 +233,7 @@ public:
   void pop(const winx_volume_region *r) {
     pop(r->lcn, r->length);
   }
-  void pop(uint64_t lcn, uint64_t length) {
-    info_ = winx_sub_volume_region(info_, lcn, length);
-    filter();
-  }
+  void pop(const uint64_t lcn, const uint64_t length);
   void pop(const winx_file_info *f);
 
   void push(const winx_file_info *f);
@@ -263,13 +260,13 @@ public:
 class FileEnumeration
 {
 private:
-  typedef std::pair<uint64_t, const winx_file_info *> pair_t;
+  typedef std::pair<uint64_t, winx_file_info *> pair_t;
   typedef boost::fast_pool_allocator
-  < pair_t, boost::default_user_allocator_new_delete, boost::details::pool::null_mutex, 262144 >
+  < pair_t, boost::default_user_allocator_new_delete, boost::details::pool::null_mutex, 25600 >
   alloc_t;
-  typedef std::multimap<uint64_t, const winx_file_info *, std::less<uint64_t>, alloc_t>
+  typedef std::multimap<uint64_t, winx_file_info *, std::less<uint64_t>, alloc_t>
   buckets_t;
-  typedef std::map<uint64_t, const winx_file_info *, std::less<uint64_t>, alloc_t>
+  typedef std::map<uint64_t, winx_file_info *, std::less<uint64_t>, alloc_t>
   lcns_t;
 
   typedef boost::fast_pool_allocator
@@ -309,8 +306,8 @@ private:
 
 public:
   typedef const buckets_t::value_type value_type;
-  typedef buckets_t::const_iterator const_iterator;
-  typedef std::vector<const winx_file_info *> files_t;
+  typedef buckets_t::iterator iterator;
+  typedef std::vector<winx_file_info *> files_t;
 
   FileEnumeration(char volume, ftw_progress_callback cb = nullptr,
                   void *ud = nullptr)
@@ -329,16 +326,16 @@ public:
     return findBest(lcn, len, partialOK);
   }
 
-  const winx_file_info *findAt(uint64_t lcn);
+  winx_file_info *findAt(uint64_t lcn);
 
   void pop(const winx_file_info *f);
 
-  void push(const winx_file_info *f);
+  void push(winx_file_info *f);
 
-  const_iterator begin() const {
+  iterator begin()  {
     return buckets_.begin();
   }
-  const_iterator end() const {
+  iterator end() {
     return buckets_.end();
   }
 

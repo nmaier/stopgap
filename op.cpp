@@ -19,7 +19,7 @@ static void __cdecl progress(winx_file_info *f, uint64_t *count)
 }
 
 static void move_file(
-  Operation &op, const winx_file_info *f, const winx_volume_region *g)
+  Operation &op, winx_file_info *f, const winx_volume_region *g)
 {
   op.fe->pop(f);
 
@@ -53,11 +53,11 @@ static void move_file(
     }
 
     op.ge->push(f);
-    winx_ftw_dump_file(const_cast<winx_file_info *>(f), nullptr, nullptr);
-    op.ge->pop(f);
+    winx_ftw_dump_file(f, nullptr, nullptr);
 
     if (NT_SUCCESS(status)) {
-      op.fe->push(const_cast<winx_file_info *>(f));
+      op.ge->pop(f);
+      op.fe->push(f);
       numlcns -= cur;
       target.lcn += cur;
       target.length -= cur;
@@ -139,51 +139,54 @@ static bool move_set(
 
 static void defrag(Operation &op)
 {
-  util::title << L"Defragmenting..." << std::flush;
-
-redo:
+  std::vector<winx_file_info *> fragmented;
   for (auto i = op.fe->begin(), e = op.fe->end(); i != e &&
        !util::ConsoleHandler::gTerminated; ++i) {
-    if (i->second->disp.fragments <= 1) {
-      continue;
+    if (i->second->disp.fragments > 1) {
+      fragmented.push_back(i->second);
     }
-    if (i->second == op.last) {
+  }
+
+  auto remaining = fragmented.size();
+  for (auto i = fragmented.begin(), e = fragmented.end(); i != e &&
+       !util::ConsoleHandler::gTerminated; ++i) {
+    util::title << L"Defragmenting... Remaining: " << remaining-- << L" files. " <<
+                std::fixed << std::setprecision(2) << op.persecond() <<
+                " moves/sec" << std::flush;
+
+    if (*i == op.last) {
       if (op.opts.verbose) {
-        std::wcout << L"Skipping " << i->second->path << std::endl;
+        std::wcout << L"Skipping " << (*i)->path << std::endl;
       }
-      op.fe->pop(i->second);
-      goto redo;
+      op.fe->pop(*i);
     }
     if (op.opts.verbose) {
-      std::wcout << L"Handling file at: " << i->second->path << L" (" <<
-                 op.vol(i->second->disp.clusters) << L", frags: " <<
-                 std::fixed << i->second->disp.fragments << L")" << std::endl;
+      std::wcout << L"Handling file at: " << (*i)->path << L" (" <<
+                 op.vol((*i)->disp.clusters) << L", frags: " <<
+                 std::fixed << (*i)->disp.fragments << L")" << std::endl;
     }
     else {
-      std::wcout << L"File: " << util::light << i->second->path << util::clear <<
-                 L" frags: " << util::red << i->second->disp.fragments << util::clear <<
+      std::wcout << L"\r" << util::light << (*i)->path + 4 << util::clear <<
+                 L" frags: " << util::red << (*i)->disp.fragments << util::clear <<
                  L"..." << std::flush;
     }
-    auto g = op.ge->best(i->second->disp.clusters);
+    auto g = op.ge->best((*i)->disp.clusters);
     if (!g) {
-      if (!op.opts.verbose) {
-        std::wcout << util::red << L" skipped." << util::clear << std::endl;
-      }
       continue;
     }
     try {
-      move_file(op, i->second, g);
+      move_file(op, *i, g);
       if (!op.opts.verbose) {
         std::wcout << util::green << L" defragmented." << util::clear << std::endl;
       }
     }
     catch (const std::exception &ex) {
-      std::wcerr << std::endl << i->second->path << L": " << util::red << ex.what() <<
+      std::wcerr << std::endl << (*i)->path << L": " << util::red << ex.what() <<
                  util:: clear << std::endl;
       op.ge->scan();
     }
-    goto redo;
   }
+  std::wcout << std::endl;
 }
 
 static bool widen_behind(Operation &op, const winx_volume_region *g,
@@ -238,7 +241,8 @@ static void close_gaps(Operation &op)
       op.ge->pop(g);
       continue;
     }
-    util::title << op.ge->count() << L" gaps remaining..." << std::flush;
+    util::title << op.ge->count() << L" gaps remaining... " << std::fixed <<
+                std::setprecision(2) << op.persecond() << " moves/sec" << std::flush;
 
     auto p = (double)g->lcn / op.vol.info.total_clusters * 100.0;
     std::wcout << L"Gap: " << util::light << std::setw(8) <<
@@ -383,6 +387,10 @@ void Operation::init(int argc, wchar_t **argv)
 
 void Operation::run()
 {
+  LARGE_INTEGER li;
+  ::QueryPerformanceCounter(&li);
+  start = li.QuadPart;
+
   replaced = true;
   while (!util::ConsoleHandler::gTerminated && replaced) {
 

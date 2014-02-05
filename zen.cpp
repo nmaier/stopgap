@@ -14,7 +14,7 @@ static const boost::wregex excluded(L":\\$|\\\\\\$|"
                                     boost::regex_constants::normal | boost::regex_constants::icase |
                                     boost::regex_constants::optimize | boost::regex_constants::nosubs);
 
-static const size_t maxlen = 2048;
+static const size_t maxlen = 256;
 
 
 namespace
@@ -91,38 +91,138 @@ void GapEnumeration::filter()
   regions_.clear();
   sizes_.clear();
   auto regs = List<winx_volume_region>(info_);
-  std::for_each(
-    regs.begin(),
-    regs.end(),
-  [this](winx_volume_region & r) {
-    auto p = std::make_pair(r.lcn, &r);
-    regions_.insert(p);
-    sizes_.insert(std::make_pair(r.length, &r));
-  });
+  for (auto i = regs.begin(), e = regs.end(); i != e; ++i) {
+    regions_.insert(regions_.end(), regions_t::value_type(i->lcn, &(*i)));
+    sizes_.insert(sizes_.end(), sizes_t::value_type(i->length, &(*i)));
+  }
+}
+
+void GapEnumeration::pop(const uint64_t lcn, const uint64_t length)
+{
+  // The idea here is that we always move files to the beginning of a gap.
+  auto g = regions_.find(lcn);
+  if (g == regions_.end()) {
+#ifdef _DEBUG
+    ::DebugBreak();
+#endif
+    scan();
+    return;
+  }
+  auto range = sizes_.equal_range(g->second->length);
+  for (auto i = range.first; i != range.second; ++i) {
+    if (i->second != g->second) {
+      continue;
+    }
+    sizes_.erase(i);
+    break;
+  }
+  if (g->second->length > length) {
+    auto n = g->second;
+    regions_.erase(g);
+    n->lcn += length;
+    n->length -= length;
+    regions_.insert(sizes_t::value_type(n->lcn, n));
+    sizes_.insert(sizes_t::value_type(n->length, n));
+    return;
+  }
+  if (g->second->length < length) {
+    ::DebugBreak(); // Something went horribly wrong!
+    return;
+  }
+  regions_.erase(g);
 }
 
 void GapEnumeration::pop(const winx_file_info *f)
 {
   auto bm = List<winx_blockmap>(f->disp.blockmap);
-  std::for_each(
-    bm.begin(),
-    bm.end(),
-  [this](const winx_blockmap & m) {
-    info_ = winx_sub_volume_region(info_, m.lcn, m.length);
-  });
-  filter();
+  for (auto i = bm.begin(), e = bm.end(); i != e; ++i) {
+    pop(i->lcn, i->length);
+  }
 }
 
 void GapEnumeration::push(const winx_file_info *f)
 {
   auto bm = List<winx_blockmap>(f->disp.blockmap);
-  std::for_each(
-    bm.begin(),
-    bm.end(),
-  [this](const winx_blockmap & m) {
-    info_ = winx_add_volume_region(info_, m.lcn, m.length);
-  });
-  filter();
+  for (auto b = bm.begin(), be = bm.end(); b != be; ++b) {
+    if (!b->length) {
+      continue;
+    }
+    auto prev = std::prev(regions_.lower_bound(b->lcn));
+    auto next = regions_.find(b->lcn + b->length);
+    bool mergePrev = prev != regions_.end() &&
+                     prev->second->lcn + prev->second->length == b->lcn;
+    bool mergeNext = next != regions_.end();
+
+    // Try to merge with existing region(s).
+    if (mergePrev && mergeNext) {
+      auto range = sizes_.equal_range(prev->second->length);
+      for (auto i = range.first; i != range.second; ++i) {
+        if (i->second != prev->second) {
+          continue;
+        }
+        sizes_.erase(i);
+        break;
+      }
+      range = sizes_.equal_range(next->second->length);
+      for (auto i = range.first; i != range.second; ++i) {
+        if (i->second != next->second) {
+          continue;
+        }
+        sizes_.erase(i);
+        break;
+      }
+      prev->second->length += b->length + next->second->length;
+      regions_.erase(next);
+      continue;
+    }
+
+    if (mergePrev) {
+      auto range = sizes_.equal_range(prev->second->length);
+      for (auto i = range.first; i != range.second; ++i) {
+        if (i->second != prev->second) {
+          continue;
+        }
+        sizes_.erase(i);
+        break;
+      }
+      prev->second->length += b->length;
+      sizes_.insert(sizes_t::value_type(prev->second->length, prev->second));
+      continue;
+    }
+    if (mergeNext) {
+      auto range = sizes_.equal_range(next->second->length);
+      for (auto i = range.first; i != range.second; ++i) {
+        if (i->second != next->second) {
+          continue;
+        }
+        sizes_.erase(i);
+        break;
+      }
+      auto n = next->second;
+      regions_.erase(next);
+      n->lcn = b->lcn;
+      n->length += b->length;
+      regions_.insert(regions_t::value_type(n->lcn, n));
+      sizes_.insert(sizes_t::value_type(n->length, n));
+      continue;
+    }
+
+    if (!info_) {
+      DebugBreak();
+      scan();
+      return;
+    }
+
+    // Insert a new region.
+    auto item = prev != regions_.end() ? prev->second : std::prev(
+                  regions_.end())->second;
+    auto nr = (winx_volume_region *)winx_list_insert((list_entry **)(
+                void *)&info_, (list_entry *)item, sizeof(winx_volume_region));
+    nr->lcn = b->lcn;
+    nr->length = b->length;
+    regions_.insert(regions_t::value_type(nr->lcn, nr));
+    sizes_.insert(sizes_t::value_type(nr->length, nr));
+  }
 }
 
 FileEnumeration::known_t FileEnumeration::known_;
@@ -171,7 +271,7 @@ void FileEnumeration::scan(ftw_progress_callback cb, void *userdata)
   });
 }
 
-const winx_file_info *FileEnumeration::findAt(uint64_t lcn)
+winx_file_info *FileEnumeration::findAt(uint64_t lcn)
 {
   if (lcns_.empty()) {
     for (auto bi = buckets_.begin(), be = buckets_.end(); bi != be; ++bi) {
@@ -214,7 +314,7 @@ void FileEnumeration::pop(const winx_file_info *f)
   assert(false);
 }
 
-void FileEnumeration::push(const winx_file_info *f)
+void FileEnumeration::push(winx_file_info *f)
 {
   if (!lcns_.empty()) {
     auto bm = zen::List<winx_blockmap>(f->disp.blockmap);
@@ -226,6 +326,7 @@ void FileEnumeration::push(const winx_file_info *f)
       lcns_.insert(std::make_pair(i.lcn + i.length - 1, f));
     });
   }
+  order(*f);
   buckets_.insert(std::make_pair(f->disp.clusters, f));
 }
 
@@ -243,7 +344,7 @@ FileEnumeration::files_t FileEnumeration::findBest(uint64_t lcn,
 
   // Find perfect item
   {
-    const winx_file_info *perfect = nullptr;
+    winx_file_info *perfect = nullptr;
     auto range = buckets_.equal_range(length);
     for (auto i = range.first; i != range.second; ++i) {
       if (filter(i->second)) {
@@ -262,7 +363,7 @@ FileEnumeration::files_t FileEnumeration::findBest(uint64_t lcn,
   // Build candidate list
   files_t cands;
   {
-    auto filter2 = [&](const winx_file_info * f) -> bool {
+    auto filter2 = [&](winx_file_info * f) -> bool {
       if (filter(f)) {
         return true;
       }

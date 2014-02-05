@@ -27,12 +27,22 @@ struct Operation {
   Options opts;
   size_t moved;
   uint64_t movedLen;
+  uint64_t start;
+  uint64_t freq;
   const winx_file_info *last;
   bool replaced;
 
   Operation()
     : moved(0), movedLen(0), last(nullptr), replaced(false) {
+    LARGE_INTEGER li;
+    ::QueryPerformanceFrequency(&li);
+    freq = li.QuadPart;
   }
   void init(int argc, wchar_t **argv);
   void run();
+  double persecond() const {
+    LARGE_INTEGER li;
+    ::QueryPerformanceCounter(&li);
+    return moved * (double)freq / (li.QuadPart - start);
+  }
 };
