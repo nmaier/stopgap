@@ -36,8 +36,8 @@ int wmain(int argc, wchar_t **argv)
     op.run();
   }
   catch (const std::exception &ex) {
-    std::wcerr << std::endl << L"Failed to process: " << util::red << ex.what() <<
-               util::clear << std::endl;
+    std::wcerr << std::endl << L"Failed to process: " << util::red <<
+               util::to_wstring(ex.what()) << util::clear << std::endl;
     InterlockedExchange(&util::ConsoleHandler::gTerminated, 3);
   }
 

@@ -5,6 +5,8 @@
 #include "util.hpp"
 #include "resource.h"
 
+#include <codecvt>
+
 namespace util
 {
 
@@ -124,6 +126,18 @@ Version::Version()
     copyright.assign((wchar_t *)val);
     break;
   }
+}
+
+static std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t> cvt;
+
+std::wstring to_wstring(const std::string &str)
+{
+  return cvt.from_bytes(str);
+}
+
+std::string to_string(const std::wstring &wstr)
+{
+  return cvt.to_bytes(wstr);
 }
 
 const color_t clear(FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);

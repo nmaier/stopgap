@@ -63,6 +63,9 @@ struct Version {
   Version();
 };
 
+std::wstring to_wstring(const std::string &str);
+std::string to_string(const std::wstring &wstr);
+
 // Because imbue()ing a locale on wcout/wcerr does not work when _O_U16TEXT or
 // any Unicode text mode for that matter.
 class proxy : public std::wostream

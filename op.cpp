@@ -135,7 +135,8 @@ static bool move_set(
     return true;
   }
   catch (const std::exception &ex) {
-    std::wcerr << std::endl << util::red << ex.what() << util::clear << std::endl;
+    std::wcerr << std::endl << util::red << util::to_wstring(ex.what()) <<
+               util::clear << std::endl;
     return false;
   }
 }
@@ -184,8 +185,8 @@ static void defrag(Operation &op)
       }
     }
     catch (const std::exception &ex) {
-      std::wcerr << std::endl << (*i)->path << L": " << util::red << ex.what() <<
-                 util:: clear << std::endl;
+      std::wcerr << std::endl << (*i)->path << L": " << util::red <<
+                 util::to_wstring(ex.what()) << util::clear << std::endl;
       op.ge->scan();
     }
   }
@@ -223,8 +224,8 @@ static bool widen_behind(Operation &op, const winx_volume_region *g,
       moved++;
     }
     catch (const std::exception &ex) {
-      std::wcerr << std::endl << f->path << ": " << util::red << ex.what() <<
-                 util::clear << std::endl;
+      std::wcerr << std::endl << f->path << ": " << util::red <<
+                 util::to_wstring(ex.what()) << util::clear << std::endl;
       return false;
     }
   }

@@ -105,7 +105,9 @@ File openFile(const winx_file_info *file)
   HANDLE rv;
   if (winx_defrag_fopen(const_cast<winx_file_info *>(file), WINX_OPEN_FOR_MOVE,
                         &rv)) {
-    throw std::exception("Failed to open file");
+    std::string ex("Failed to open file: ");
+    ex.append(util::to_string(file->path));
+    throw std::exception(ex.c_str());
   }
   return File(rv);
 }
