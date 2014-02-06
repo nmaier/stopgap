@@ -111,7 +111,8 @@ static bool move_set(
   Operation &op, zen::FileEnumeration::files_t &files, winx_volume_region &r)
 {
   try {
-    for (auto i = files.begin(), e = files.end(); i != e; ++i) {
+    for (auto i = files.begin(), e = files.end(); i != e &&
+         !util::ConsoleHandler::gTerminated; ++i) {
       auto f = *i;
 
       if (op.opts.verbose) {
