@@ -281,7 +281,6 @@ winx_file_info *FileEnumeration::findAt(uint64_t lcn)
         bm.end(),
       [&](const winx_blockmap & block) {
         lcns_.insert(std::make_pair(block.lcn, bi->second));
-        lcns_.insert(std::make_pair(block.lcn + block.length - 1, bi->second));
       });
     }
   }
@@ -301,7 +300,6 @@ void FileEnumeration::pop(const winx_file_info *f)
       bm.end(),
     [&](const winx_blockmap & i) {
       lcns_.erase(i.lcn);
-      lcns_.erase(i.lcn + i.length - 1);
     });
   }
   auto range = buckets_.equal_range(f->disp.clusters);
@@ -323,7 +321,6 @@ void FileEnumeration::push(winx_file_info *f)
       bm.end(),
     [this, f](const winx_blockmap & i) {
       lcns_.insert(std::make_pair(i.lcn, f));
-      lcns_.insert(std::make_pair(i.lcn + i.length - 1, f));
     });
   }
   order(*f);
