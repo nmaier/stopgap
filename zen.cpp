@@ -10,7 +10,7 @@
 
 static const boost::wregex excluded(L":\\$|\\\\\\$|"
                                     L"\\\\(?:safeboot\\.fs$|Gobackio\\.bin$|PGPWDE|bootwiz|BootAuth.\\.sys|\\$dcsys\\$|bootstat\\.dat|bootsqm\\.dat)|"
-                                    L":\\\\(?:io\\.sys|msdos\\.sys|ibmbio\\.com|ibmdos\\.com|drbios\\.sys)",
+                                    L":\\\\(?:io\\.sys|msdos\\.sys|ibmbio\\.com|ibmdos\\.com|drbios\\.sys|System Volume Information)",
                                     boost::regex_constants::normal | boost::regex_constants::icase |
                                     boost::regex_constants::optimize | boost::regex_constants::nosubs);
 
