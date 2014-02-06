@@ -295,11 +295,7 @@ void Options::parse(int argc, wchar_t **argv)
    po::value<size_t>(&maxSize)->
    default_value(102400),
    "Maximum gap size in KB to consider")
-  ("verbose,v",
-   po::value<int>(&verbose)->
-   default_value(0)->
-   implicit_value(1),
-   "Set verbosity")
+  ("verbose,v", "Set verbosity")
   ("aggressive,a",
    "Aggressive processing (disregarding maxsize)")
   ("no-gaps", "Do not attempt to close gaps")
@@ -343,6 +339,7 @@ void Options::parse(int argc, wchar_t **argv)
     auto v = vm["volume"].as<std::wstring>();
     volume = (char) v[0];
   }
+  verbose = vm.count("verbose");
   aggressive = vm.count("aggressive") > 0;
   gaps = vm.count("no-gaps") < 1;
   defrag = vm.count("no-defrag") < 1;
