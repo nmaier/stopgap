@@ -12,9 +12,12 @@ struct Options {
   int verbose;
   char volume;
   bool aggressive;
+  bool gaps;
+  bool defrag;
 
   Options()
-    : maxSize(102400), volume('\0'), verbose(0), aggressive(false) {
+    : maxSize(102400), volume('\0'), verbose(0), aggressive(false), gaps(true),
+      defrag(true) {
   }
 
   void parse(int argc, wchar_t **argv);

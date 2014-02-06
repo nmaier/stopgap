@@ -302,6 +302,8 @@ void Options::parse(int argc, wchar_t **argv)
    "Set verbosity")
   ("aggressive,a",
    "Aggressive processing (disregarding maxsize)")
+  ("no-gaps", "Do not attempt to close gaps")
+  ("no-defrag", "Do not attempt to defrag files")
   ;
   po::positional_options_description p;
   p.add("volume", -1);
@@ -342,6 +344,8 @@ void Options::parse(int argc, wchar_t **argv)
     volume = (char) v[0];
   }
   aggressive = vm.count("aggressive") > 0;
+  gaps = vm.count("no-gaps") < 1;
+  defrag = vm.count("no-defrag") < 1;
 
   if ((volume < 'a' || volume > 'z') && (volume < 'A' || volume > 'Z')) {
     throw std::exception("You need to specify a volume!");
@@ -394,14 +398,17 @@ void Operation::run()
   replaced = true;
   while (!util::ConsoleHandler::gTerminated && replaced) {
 
-    // Some defragmentation.
-    defrag(*this);
-    ge->scan();
+    if (opts.defrag) {
+      // Some defragmentation.
+      defrag(*this);
+      ge->scan();
+    }
 
-    replaced = false;
-
-    close_gaps(*this);
-    ge->scan();
+    if (opts.gaps) {
+      replaced = false;
+      close_gaps(*this);
+      ge->scan();
+    }
   }
 
   util::title << L"Finishing..." << std::flush;
