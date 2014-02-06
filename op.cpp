@@ -10,6 +10,8 @@
 
 #include <boost/program_options.hpp>
 
+using util::ConsoleHandler;
+
 static void __cdecl progress(winx_file_info *f, uint64_t *count)
 {
   if (!(++*count % 13579)) {
@@ -112,7 +114,7 @@ static bool move_set(
 {
   try {
     for (auto i = files.begin(), e = files.end(); i != e &&
-         !util::ConsoleHandler::gTerminated; ++i) {
+         !ConsoleHandler::gTerminated; ++i) {
       auto f = *i;
 
       if (op.opts.verbose) {
@@ -142,7 +144,7 @@ static void defrag(Operation &op)
 {
   std::vector<winx_file_info *> fragmented;
   for (auto i = op.fe->begin(), e = op.fe->end(); i != e &&
-       !util::ConsoleHandler::gTerminated; ++i) {
+       !ConsoleHandler::gTerminated; ++i) {
     if (i->second->disp.fragments > 1) {
       fragmented.push_back(i->second);
     }
@@ -150,7 +152,7 @@ static void defrag(Operation &op)
 
   auto remaining = fragmented.size();
   for (auto i = fragmented.begin(), e = fragmented.end(); i != e &&
-       !util::ConsoleHandler::gTerminated; ++i) {
+       !ConsoleHandler::gTerminated; ++i) {
     util::title << L"Defragmenting... Remaining: " << remaining-- << L" files. " <<
                 std::fixed << std::setprecision(2) << op.persecond() <<
                 " moves/sec" << std::flush;
@@ -196,7 +198,7 @@ static bool widen_behind(Operation &op, const winx_volume_region *g,
   auto r = *g;
   size_t moved = 0;
   uint64_t movedlen = 0;
-  for (auto i = 0; !util::ConsoleHandler::gTerminated &&
+  for (auto i = 0; !ConsoleHandler::gTerminated &&
        movedlen < op.opts.maxSize / 2 && moved < maxMoves ; ++i) {
 
     auto f = op.fe->findAt(r.lcn + r.length);
@@ -236,7 +238,7 @@ static bool widen_behind(Operation &op, const winx_volume_region *g,
 static void close_gaps(Operation &op)
 {
   bool partialOK = false;
-  for (auto g = op.ge->next(); g && !util::ConsoleHandler::gTerminated;
+  for (auto g = op.ge->next(); g && !ConsoleHandler::gTerminated;
        g = op.ge->next()) {
     if (!op.opts.aggressive && g->length > op.opts.maxSize) {
       op.ge->pop(g);
@@ -394,7 +396,7 @@ void Operation::run()
   start = li.QuadPart;
 
   replaced = true;
-  while (!util::ConsoleHandler::gTerminated && replaced) {
+  while (!ConsoleHandler::gTerminated && replaced) {
 
     if (opts.defrag) {
       // Some defragmentation.
