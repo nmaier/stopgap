@@ -128,9 +128,14 @@ static bool move_set(
       r.length -= f->disp.clusters;
     }
     if (!op.opts.verbose) {
-      std::wcout << util::green << (r.length ? L" partially" : L"") <<
-                 L" closed using " << files.size() <<
-                 (files.size() > 1 ? L" files." : L" file.") << util::clear << std::endl;
+      if (r.length) {
+        std::wcout << util::yellow << L" partially";
+      }
+      else {
+        std::wcout << util::green;
+      }
+      std::wcout << L" closed using " << files.size() << (files.size() > 1 ?
+                 L" files." : L" file.") << util::clear << std::endl;
     }
     return true;
   }
@@ -155,8 +160,7 @@ static void defrag(Operation &op)
   for (auto i = fragmented.begin(), e = fragmented.end(); i != e &&
        !ConsoleHandler::gTerminated; ++i) {
     util::title << L"Defragmenting... Remaining: " << remaining-- << L" files. " <<
-                std::fixed << std::setprecision(2) << op.persecond() <<
-                " moves/sec" << std::flush;
+                op.metrics() << std::flush;
 
     if (*i == op.last) {
       if (op.opts.verbose) {
@@ -245,11 +249,11 @@ static void close_gaps(Operation &op)
       op.ge->pop(g);
       continue;
     }
-    util::title << op.ge->count() << L" gaps remaining... " << std::fixed <<
-                std::setprecision(2) << op.persecond() << " moves/sec" << std::flush;
+    util::title << op.ge->count() << L" gaps remaining... " << op.metrics() <<
+                std::flush;
 
     auto p = (double)g->lcn / op.vol.info.total_clusters * 100.0;
-    std::wcout << L"Gap: " << util::light << std::setw(8) <<
+    std::wcout << L"\rGap: " << util::light << std::setw(8) <<
                std::right << op.vol(g->length) << util::clear <<
                L" @ " << util::light << std::setw(12) << g->lcn <<
                util::clear << L" (" << std::setw(5) <<
@@ -267,16 +271,10 @@ static void close_gaps(Operation &op)
     else {
       auto widened = widen_behind(op, g, partialOK ? 100 : 3);
       if (!widened && partialOK) {
-        if (!op.opts.verbose) {
-          std::wcout << util::red << L" skipped." << util::clear << std::endl;
-        }
         op.ge->pop(g);
         partialOK = false;
       }
       else {
-        if (!widened && !op.opts.verbose) {
-          std::wcout << util::yellow << L" retrying." << util::clear << std::endl;
-        }
         partialOK = true;
       }
     }
@@ -420,13 +418,15 @@ void Operation::run()
              << util::clear << std::endl;
   std::wcout << L"Carried out " << util::light << moved << util::clear <<
              L" successful moves, having moved " << util::light << vol(movedLen) <<
-             util::clear << L"." << std::endl;
+             util::clear << L" (" << vol(movedLen / seconds()) << L"/sec)." <<
+             std::endl;
 
   uint64_t smallish = 0, smallsize = 0;
   uint64_t largish = 0, largesize = 0;
   auto largest = ge->sbegin();
   if (largest != ge->send()) {
-    std::wcout << L"Largest consecutive gap: " << vol(largest->first) << std::endl;
+    std::wcout << L"Largest consecutive gap: " << util::blue <<
+               vol(largest->first) << util::clear << std::endl;
   }
   for (auto i = ge->begin(), e = ge->end(); i != e; ++i) {
     if (i->second->length <= opts.maxSize) {
@@ -452,4 +452,14 @@ void Operation::run()
                L" small gaps covering " << util::light << vol(smallsize)
                << util::clear << std::endl;
   }
+}
+
+std::wstring Operation::metrics() const
+{
+  auto s = seconds();
+  std::wstringstream ss;
+  ss.imbue(std::locale(""));
+  ss << std::fixed << std::setprecision(2) << (moved / s) <<
+     L" moves/sec, " << vol(movedLen / s) << L"/sec";
+  return ss.str();
 }

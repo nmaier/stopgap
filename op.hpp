@@ -44,9 +44,10 @@ struct Operation {
   }
   void init(int argc, wchar_t **argv);
   void run();
-  double persecond() const {
+  double seconds() const {
     LARGE_INTEGER li;
     ::QueryPerformanceCounter(&li);
-    return moved * (double)freq / (li.QuadPart - start);
+    return (li.QuadPart - start) / (double)freq;
   }
+  std::wstring metrics() const;
 };
