@@ -38,10 +38,18 @@
 /* tables for character case conversion */
 #include "case-tables.h"
 
-#define fast_toupper(c)  (ascii_uppercase[(int)(unsigned char)(c)])
-#define fast_tolower(c)  (ascii_lowercase[(int)(unsigned char)(c)])
-#define fast_towupper(c) (u16_uppercase[(unsigned int)(c)])
-#define fast_towlower(c) (u16_lowercase[(unsigned int)(c)])
+static char fast_toupper(char c) {
+	return ascii_uppercase[(int)(unsigned char)c];
+}
+static char fast_tolower(char c) {
+	return ascii_lowercase[(int)(unsigned char)c];
+}
+static wchar_t fast_towupper(wchar_t c) {
+	return u16_uppercase[(unsigned int)c];
+}
+static wchar_t fast_towlower(wchar_t c) {
+	return u16_lowercase[(unsigned int)c];
+}
 
 /**
  * @internal
