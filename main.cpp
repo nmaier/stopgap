@@ -21,8 +21,9 @@ int wmain(int argc, wchar_t **argv)
   // Set up console.
   _setmode(_fileno(stdout), _O_U16TEXT);
   _setmode(_fileno(stderr), _O_U16TEXT);
-  std::wcout = util::proxy(&std::wcout);
-  std::wcerr = util::proxy(&std::wcerr);
+  std::wcout = util::proxy();
+  std::wcerr = util::proxy();
+
   std::wcout << util::clear;
 
   // Set up CTRL-C handler

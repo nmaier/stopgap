@@ -70,25 +70,8 @@ std::string to_string(const std::wstring &wstr);
 // any Unicode text mode for that matter.
 class proxy : public std::wostream
 {
-private:
-  class buf : public std::wstringbuf
-  {
-  private:
-    std::wostream &os_;
-  public:
-    buf(std::wostream &os) : os_(os) {}
-    ~buf() {
-      pubsync();
-    }
-    int sync() {
-      os_ << str();
-      str(L"");
-      return !os_;
-    }
-  };
-
 public:
-  proxy(std::wostream *os) : std::wostream(new buf(*os)) {
+  proxy() : std::wostream(new std::wstringbuf()) {
     imbue(std::locale(""));
     *this << std::showbase;
   }
