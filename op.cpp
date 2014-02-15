@@ -315,7 +315,7 @@ void Options::parse(int argc, wchar_t **argv)
     std::stringstream ss;
     ss << desc;
     std::wcout << ss.str().c_str() << std::endl << util::clear;
-    _exit(1);
+    throw Exit(1);
   }
   if (vm.count("version")) {
     util::Version v;
@@ -336,7 +336,7 @@ void Options::parse(int argc, wchar_t **argv)
                << std::endl << util::clear;
 #endif
     std::wcout << std::endl;
-    _exit(0);
+    throw Exit(0);
   }
   if (vm.count("volume")) {
     auto v = vm["volume"].as<std::wstring>();

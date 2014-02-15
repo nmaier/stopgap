@@ -51,3 +51,11 @@ struct Operation {
   }
   std::wstring metrics() const;
 };
+
+class Exit : public std::exception
+{
+public:
+  Exit(int code) : std::exception("Exiting program"), code_(code) {}
+
+  const int code_;
+};

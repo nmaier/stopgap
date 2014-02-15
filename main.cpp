@@ -15,6 +15,8 @@
 int wmain(int argc, wchar_t **argv)
 {
   // Any RAII stuff here is leaked on purpose!
+  // If any RAII stuff needs to be actually destructed, move it into a block inside the
+  // main try-catch block.
 
   // Set up console.
   _setmode(_fileno(stdout), _O_U16TEXT);
@@ -30,10 +32,15 @@ int wmain(int argc, wchar_t **argv)
 
   Operation op;
   try {
-    util::ConsoleIcon icon;
-
     op.init(argc, argv);
-    op.run();
+    {
+      util::ConsoleIcon icon;
+      op.run();
+    }
+  }
+  catch (const Exit &ex) {
+    std::wcout << util::clear;
+    _exit(ex.code_);
   }
   catch (const std::exception &ex) {
     std::wcerr << std::endl << L"Failed to process: " << util::red <<
