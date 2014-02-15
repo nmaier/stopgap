@@ -314,7 +314,31 @@ void Options::parse(int argc, wchar_t **argv)
   if (vm.count("help")) {
     std::stringstream ss;
     ss << desc;
-    std::wcout << ss.str().c_str() << std::endl << util::clear;
+    std::wcout << L"Usage: " << util::light << L"stopgap [options] <volume>" <<
+               util::clear << std::endl << std::endl;
+    std::wcout << ss.str().c_str() << std::endl << std::endl;
+    std::wcout <<
+               L"  * The number of gaps may initially increase, but will decrease towards the\n"
+               L"    end of the operation. This is expected."
+               << std::endl;
+    std::wcout <<
+               L"  * The sizes displayed are always rounded up to the nearest cluster size. This\n"
+               L"    in particular means that less data might have been moved than indicated by\n"
+               L"    this program."
+               << std::endl;
+    std::wcout <<
+               L"  * For best fill use the <aggressive> and <widen> options. However, please note\n"
+               L"    that this will potentially move around a lot more data and therefore put\n"
+               L"    more strain on the disk."
+               << std::endl;
+    std::wcout <<
+               L"  * It is sometimes claimed that defragmentation of solid state disks is\n"
+               L"    unnecessary or worse. While it is true that defragmentation puts additional\n"
+               L"    strain on the disk and that the raw access times do not really improve, one\n"
+               L"    should keep in mind that there is still a file system layered on top of the\n"
+               L"    actual disk, which might underperform when fragmentation reaches a certain\n"
+               L"    point. (E.g. look up \"$ATTRIBUTE_LIST\")"
+               << std::endl;
     throw Exit(1);
   }
   if (vm.count("version")) {
