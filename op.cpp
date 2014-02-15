@@ -199,7 +199,7 @@ static bool widen_behind(Operation &op, const winx_volume_region *g,
   auto r = *g;
   size_t moved = 0;
   uint64_t movedlen = 0;
-  for (auto i = 0; !ConsoleHandler::gTerminated &&
+  for (auto i = 0; op.opts.widen && !ConsoleHandler::gTerminated &&
        movedlen < op.opts.maxSize / 2 && moved < maxMoves ; ++i) {
 
     auto f = op.fe->findAt(r.lcn + r.length);
@@ -300,6 +300,7 @@ void Options::parse(int argc, wchar_t **argv)
    default_value(102400),
    "Maximum gap size in KB to consider")
   ("verbose,v", "Set verbosity")
+  ("widen,w", "Attempt to close more gaps by widening gaps first")
   ("aggressive,a",
    "Aggressive processing (disregarding maxsize)")
   ("no-gaps", "Do not attempt to close gaps")
@@ -347,6 +348,7 @@ void Options::parse(int argc, wchar_t **argv)
   aggressive = vm.count("aggressive") > 0;
   gaps = vm.count("no-gaps") < 1;
   defrag = vm.count("no-defrag") < 1;
+  widen = vm.count("widen") > 0;
 
   if ((volume < 'a' || volume > 'z') && (volume < 'A' || volume > 'Z')) {
     throw std::exception("You need to specify a volume!");

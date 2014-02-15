@@ -14,10 +14,11 @@ struct Options {
   bool aggressive;
   bool gaps;
   bool defrag;
+  bool widen;
 
   Options()
     : maxSize(102400), volume('\0'), verbose(0), aggressive(false), gaps(true),
-      defrag(true) {
+      defrag(true), widen(false) {
   }
 
   void parse(int argc, wchar_t **argv);
