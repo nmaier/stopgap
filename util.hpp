@@ -48,7 +48,7 @@ public:
 
 struct ConsoleIcon {
   HWND window_;
-  HICON icon_;
+  HICON iconSm_, iconLg_;
   HICON oldIconSm_, oldIconLg_;
 
   ConsoleIcon();

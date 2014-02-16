@@ -16,7 +16,7 @@ static void __cdecl progress(winx_file_info *f, uint64_t *count)
 {
   if (!(++*count % 13579)) {
     std::wcout << L"\r" << util::light << *count << util::clear <<
-               L" items so far...";
+               L" items so far…";
   }
 }
 
@@ -159,7 +159,7 @@ static void defrag(Operation &op)
   auto remaining = fragmented.size();
   for (auto i = fragmented.begin(), e = fragmented.end(); i != e &&
        !ConsoleHandler::gTerminated; ++i) {
-    util::title << L"Defragmenting... Remaining: " << remaining-- << L" files. " <<
+    util::title << L"Defragmenting… Remaining: " << remaining-- << L" files. " <<
                 op.metrics() << std::flush;
 
     if (*i == op.last) {
@@ -176,7 +176,7 @@ static void defrag(Operation &op)
     else {
       std::wcout << L"\r" << util::light << (*i)->path + 4 << util::clear <<
                  L" frags: " << util::red << (*i)->disp.fragments << util::clear <<
-                 L"..." << std::flush;
+                 L"…" << std::flush;
     }
     auto g = op.ge->best((*i)->disp.clusters);
     if (!g) {
@@ -249,7 +249,7 @@ static void close_gaps(Operation &op)
       op.ge->pop(g);
       continue;
     }
-    util::title << op.ge->count() << L" gaps remaining... " << op.metrics() <<
+    util::title << op.ge->count() << L" gaps remaining… " << op.metrics() <<
                 std::flush;
 
     auto p = (double)g->lcn / op.vol.info.total_clusters * 100.0;
@@ -258,7 +258,7 @@ static void close_gaps(Operation &op)
                L" @ " << util::light << std::setw(12) << g->lcn <<
                util::clear << L" (" << std::setw(5) <<
                std::right << std::setprecision(1) << std::fixed <<
-               p << L"%) ..." << std::flush;
+               p << L"%) …" << std::flush;
     auto files = op.fe->findBest(g, partialOK);
     if (!files.empty()) {
       auto r = *g;
@@ -397,7 +397,7 @@ void Operation::init(int argc, wchar_t **argv)
              util::light << vol(opts.maxSize) << util::clear << std::endl;
   std::wcout << std::endl;
 
-  util::title << L"Enumerating files..." << std::flush;
+  util::title << L"Enumerating files…" << std::flush;
 
   ge.reset(new zen::GapEnumeration(opts.volume));
   uint64_t count = 0;
@@ -429,14 +429,15 @@ void Operation::run()
       ge->scan();
     }
 
+    replaced = false;
+
     if (opts.gaps) {
-      replaced = false;
       close_gaps(*this);
       ge->scan();
     }
   }
 
-  util::title << L"Finishing..." << std::flush;
+  util::title << L"Finishing…" << std::flush;
   ge->scan();
   std::wcout << std::endl << L"Final gap count: " << util::light << ge->count()
              << util::clear << std::endl;

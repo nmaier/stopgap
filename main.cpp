@@ -33,11 +33,10 @@ int wmain(int argc, wchar_t **argv)
 
   Operation op;
   try {
+    util::ConsoleIcon icon;
+
     op.init(argc, argv);
-    {
-      util::ConsoleIcon icon;
-      op.run();
-    }
+    op.run();
   }
   catch (const Exit &ex) {
     std::wcout << util::clear;

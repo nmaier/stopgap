@@ -25,20 +25,34 @@ Title title;
 volatile long ConsoleHandler::gTerminated = 0;
 
 ConsoleIcon::ConsoleIcon()
-  : window_(nullptr), icon_(nullptr), oldIconSm_(nullptr),
+  : window_(nullptr), iconSm_(nullptr), iconLg_(nullptr), oldIconSm_(nullptr),
     oldIconLg_(nullptr)
 {
   window_ = ::GetConsoleWindow();
   if (!window_) {
     return;
   }
-  icon_ = (HICON)::LoadIcon(::GetModuleHandle(nullptr),
-                            MAKEINTRESOURCE(IDI_ICON1));
-  if (icon_) {
+  iconLg_ = (HICON)::LoadImage(
+              ::GetModuleHandle(nullptr),
+              MAKEINTRESOURCE(IDI_ICON1),
+              IMAGE_ICON,
+              0, 0,
+              LR_DEFAULTSIZE);
+  auto cxsmicon = ::GetSystemMetrics(SM_CXSMICON);
+  iconSm_ = (HICON)::LoadImage(
+              ::GetModuleHandle(nullptr),
+              MAKEINTRESOURCE(IDI_ICON1),
+              IMAGE_ICON,
+              cxsmicon, cxsmicon,
+              0);
+
+  if (iconSm_) {
     oldIconSm_ = (HICON)::SendMessage(window_, WM_SETICON, ICON_SMALL,
-                                      (LPARAM)icon_);
+                                      (LPARAM)iconSm_);
+  }
+  if (iconLg_) {
     oldIconLg_ = (HICON)::SendMessage(window_, WM_SETICON, ICON_BIG,
-                                      (LPARAM)icon_);
+                                      (LPARAM)iconLg_);
   }
 }
 
@@ -55,8 +69,11 @@ ConsoleIcon::~ConsoleIcon()
     ::SendMessage(window_, WM_SETICON, ICON_BIG,
                   (LPARAM)oldIconLg_);
   }
-  if (icon_) {
-    ::DestroyIcon(icon_);
+  if (iconSm_) {
+    ::DestroyIcon(iconSm_);
+  }
+  if (iconLg_) {
+    ::DestroyIcon(iconLg_);
   }
   window_ = nullptr;
 }
