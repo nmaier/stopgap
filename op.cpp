@@ -33,7 +33,6 @@ static void move_file(
 
   auto startlcn = 0;
   auto numlcns = f->disp.clusters;
-  auto attempt = 0;
   while (auto cur = (ULONG)min(numlcns, MAXULONG32 - 10)) {
     NTSTATUS status;
     {
@@ -411,6 +410,15 @@ void Operation::init(int argc, wchar_t **argv)
              L" processable files in total" << std::endl;
   std::wcout << L"Found " << util::yellow << fe->unprocessable() << util::clear
              << L" unprocessable files" << std::endl;
+
+  if (opts.verbose) {
+    std::wcout << util::yellow;
+    for (auto i = fe->unmovable().begin(), e = fe->unmovable().end(); i != e; ++i) {
+      std::wcout << ((*i)->path + 4) << std::endl;
+    }
+    std::wcout << util::clear;
+  }
+
   std::wcout << L"There are " << util::light << fe->fragmented() << util::clear
              << L" fragmented files" << std::endl;
   std::wcout << L"Initial gap count: " << util::light << ge->count() <<

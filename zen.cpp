@@ -51,7 +51,7 @@ const winx_volume_region *GapEnumeration::best(
   // Find a matching region.
   auto range = sizes_.equal_range(clusters);
   for (auto i = range.first; i != range.second; ++i) {
-    if (behindOnly && i->second->lcn <= not->lcn) {
+    if (behindOnly && not && i->second->lcn <= not->lcn) {
       continue;
     }
     if (i->second != not) {
@@ -64,7 +64,7 @@ const winx_volume_region *GapEnumeration::best(
   // would cause additional small gaps, we might not be able to fill later.
   for (auto i = sizes_.upper_bound(max(clusters * 3 / 2, clusters + 512)),
        e = sizes_.end(); i != e; ++i) {
-    if (behindOnly && i->second->lcn <= not->lcn) {
+    if (behindOnly && not && i->second->lcn <= not->lcn) {
       continue;
     }
     if (i->second != not) {
@@ -76,7 +76,7 @@ const winx_volume_region *GapEnumeration::best(
     if (i->first < clusters) {
       break;
     }
-    if (behindOnly && i->second->lcn <= not->lcn) {
+    if (behindOnly && not && i->second->lcn <= not->lcn) {
       continue;
     }
     if (i->second != not) {
@@ -261,10 +261,12 @@ void FileEnumeration::scan(ftw_progress_callback cb, void *userdata)
       fragmented_++;
     }
     if (!f.disp.blockmap) {
+      unmovable_.push_back(&f);
       unprocessable_++;
       return;
     }
     if (boost::regex_search(f.path, excluded)) {
+      unmovable_.push_back(&f);
       unprocessable_++;
       return;
     }

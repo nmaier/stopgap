@@ -102,7 +102,7 @@ typedef std::unique_ptr <void, file_close> File;
 
 File openFile(const winx_file_info *file)
 {
-  HANDLE rv;
+  HANDLE rv = nullptr;
   if (winx_defrag_fopen(const_cast<winx_file_info *>(file), WINX_OPEN_FOR_MOVE,
                         &rv)) {
     std::string ex("Failed to open file: ");
@@ -261,6 +261,9 @@ public:
 
 class FileEnumeration
 {
+public:
+  typedef std::vector<winx_file_info *> files_t;
+
 private:
   typedef std::pair<uint64_t, winx_file_info *> pair_t;
   typedef boost::fast_pool_allocator
@@ -286,6 +289,7 @@ private:
   const char volume_;
   buckets_t buckets_;
   lcns_t lcns_;
+  files_t unmovable_;
   winx_file_info *info_;
   uint64_t fragmented_;
   uint64_t unprocessable_;
@@ -304,12 +308,12 @@ private:
 
     buckets_.clear();
     lcns_.clear();
+    unmovable_.clear();
   }
 
 public:
   typedef const buckets_t::value_type value_type;
   typedef buckets_t::iterator iterator;
-  typedef std::vector<winx_file_info *> files_t;
 
   FileEnumeration(char volume, ftw_progress_callback cb = nullptr,
                   void *ud = nullptr)
@@ -349,6 +353,10 @@ public:
   }
   uint64_t unprocessable() const {
     return unprocessable_;
+  }
+
+  const files_t &unmovable() const {
+    return unmovable_;
   }
 };
 
