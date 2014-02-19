@@ -25,7 +25,6 @@ static void move_file(
 {
   op.fe->pop(f);
 
-  auto file = zen::openFile(f);
   auto target = *g;
 
   IO_STATUS_BLOCK iosb;
@@ -36,22 +35,27 @@ static void move_file(
   auto numlcns = f->disp.clusters;
   auto attempt = 0;
   while (auto cur = (ULONG)min(numlcns, MAXULONG32 - 10)) {
-    mfd.FileHandle = file.get();
-    mfd.StartVcn.QuadPart = startlcn;
-    mfd.NumVcns = cur;
-    mfd.TargetLcn.QuadPart = target.lcn;
-    if (op.opts.verbose > 1) {
-      std::wcout << L"Moving " << cur << L" segments (" <<
-                 op.vol(cur) << L") to " << target.lcn
-                 << L"(" << op.vol(target.length) << L")" << std::endl;
-    }
-    NTSTATUS status = ::NtFsControlFile(op.vol, nullptr, nullptr, 0, &iosb,
-                                        FSCTL_MOVE_FILE, &mfd,
-                                        sizeof(mfd), nullptr, 0);
-    if (NT_SUCCESS(status)) {
-      //::FlushFileBuffers(mfd.FileHandle);
-      ::NtWaitForSingleObject(op.vol, FALSE, nullptr);
-      status = iosb.Status;
+    NTSTATUS status;
+    {
+      auto file = zen::openFile(f);
+      mfd.FileHandle = file.get();
+      mfd.StartVcn.QuadPart = startlcn;
+      mfd.NumVcns = cur;
+      mfd.TargetLcn.QuadPart = target.lcn;
+      if (op.opts.verbose) {
+        std::wcout << L"Moving " << cur << L" segments (" <<
+                   op.vol(cur) << L") to " << target.lcn <<
+                   L"(" << op.vol(target.length) << L")" <<
+                   std::endl;
+      }
+      status = ::NtFsControlFile(op.vol, nullptr, nullptr, 0, &iosb,
+                                 FSCTL_MOVE_FILE, &mfd,
+                                 sizeof(mfd), nullptr, 0);
+      if (NT_SUCCESS(status)) {
+        //::FlushFileBuffers(mfd.FileHandle);
+        ::NtWaitForSingleObject(op.vol, FALSE, nullptr);
+        status = iosb.Status;
+      }
     }
 
     op.ge->push(f);
