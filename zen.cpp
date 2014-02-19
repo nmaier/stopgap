@@ -8,11 +8,12 @@
 #include <boost/multi_array.hpp>
 #include <boost/regex.hpp>
 
-static const boost::wregex excluded(L":\\$|\\\\\\$|"
-                                    L"\\\\(?:safeboot\\.fs$|Gobackio\\.bin$|PGPWDE|bootwiz|BootAuth.\\.sys|\\$dcsys\\$|bootstat\\.dat|bootsqm\\.dat)|"
-                                    L":\\\\(?:io\\.sys|msdos\\.sys|ibmbio\\.com|ibmdos\\.com|drbios\\.sys|System Volume Information)",
-                                    boost::regex_constants::normal | boost::regex_constants::icase |
-                                    boost::regex_constants::optimize | boost::regex_constants::nosubs);
+static const boost::wregex excluded(
+  L":\\$|:\\\\\\$|"
+  L"\\\\(?:safeboot\\.fs$|Gobackio\\.bin$|PGPWDE|bootwiz|BootAuth.\\.sys|\\$dcsys\\$|bootstat\\.dat|bootsqm\\.dat)|"
+  L":\\\\(?:io\\.sys|msdos\\.sys|ibmbio\\.com|ibmdos\\.com|drbios\\.sys|System Volume Information)",
+  boost::regex_constants::normal | boost::regex_constants::icase |
+  boost::regex_constants::optimize | boost::regex_constants::nosubs);
 
 static const size_t maxlen = 256;
 
