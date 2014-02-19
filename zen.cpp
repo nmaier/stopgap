@@ -174,6 +174,7 @@ void GapEnumeration::push(const winx_file_info *f)
       }
       prev->second->length += b->length + next->second->length;
       regions_.erase(next);
+      sizes_.insert(sizes_t::value_type(prev->second->length, prev->second));
       continue;
     }
 
