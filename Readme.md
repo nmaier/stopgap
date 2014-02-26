@@ -52,10 +52,6 @@ Notes
   multiple/overlapped IOOps in parallel isn't really helpful either.
 * StopGap might initially cause more gaps to appear. This is expected
   and the gaps should disappear again as the operation progresses.
-* The code does some nasty in-memory function patching to replace the
-  allocator of zenwinx with the default one. In release mode, it is
-  expected that the default allocator is something sane,
-  libtcmalloc_minimal by default. Define NO_PATCH to disable this.
 * You need the WDK to compile. And boost.
 * Should compile using the MSVC and Intel compilers.
   Tested MSVC 2012 and Intel 14. As such, StopGap only uses C++11
