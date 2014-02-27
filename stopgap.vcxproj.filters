@@ -9,6 +9,10 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
+    <Filter Include="Content Files">
+      <UniqueIdentifier>{49e06b93-5918-461b-a3f7-bcaa740171ab}</UniqueIdentifier>
+      <ParseFiles>false</ParseFiles>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -38,6 +42,12 @@
   <ItemGroup>
     <None Include="harddisk.ico">
       <Filter>Resource Files</Filter>
+    </None>
+    <None Include="LICENSE">
+      <Filter>Content Files</Filter>
+    </None>
+    <None Include="Readme.md">
+      <Filter>Content Files</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

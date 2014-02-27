@@ -62,7 +62,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>kernel32.lib;user32.lib;ntdll.lib;version.lib;shlwapi.lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;ntdll.lib;version.lib;shlwapi.lib;advapi32.lib</AdditionalDependencies>
       <UACExecutionLevel>HighestAvailable</UACExecutionLevel>
       <AdditionalLibraryDirectories>C:\Boost\lib64;C:\WinDDK\7600.16385.1\lib\win7\amd64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ForceSymbolReferences>_tcmalloc;%(ForceSymbolReferences)</ForceSymbolReferences>
@@ -95,7 +95,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>kernel32.lib;user32.lib;ntdll.lib;version.lib;shlwapi.lib</AdditionalDependencies>
+      <AdditionalDependencies>kernel32.lib;user32.lib;ntdll.lib;version.lib;shlwapi.lib;advapi32.lib</AdditionalDependencies>
       <UACExecutionLevel>HighestAvailable</UACExecutionLevel>
       <AdditionalLibraryDirectories>C:\Boost\lib64;C:\WinDDK\7600.16385.1\lib\win7\amd64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <ForceSymbolReferences>_tcmalloc;%(ForceSymbolReferences)</ForceSymbolReferences>
@@ -127,6 +127,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="harddisk.ico" />
+    <None Include="LICENSE">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Readme.md">
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Object Include="dispatchpatch64.obj" />

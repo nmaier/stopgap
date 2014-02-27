@@ -134,5 +134,8 @@ extern const color_t blue;
 extern const color_t red;
 extern const color_t yellow;
 
+void registerPath();
+void unregisterPath();
+
 
 } // namespace win

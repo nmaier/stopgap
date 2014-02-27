@@ -293,9 +293,6 @@ void Options::parse(int argc, wchar_t **argv)
    "Produce this help message")
   ("version,V",
    "Version information")
-  ("volume",
-   po::wvalue<std::wstring>(),
-   "Volume to defrag")
   ("maxsize,m",
    po::value<size_t>(&maxSize)->
    default_value(102400),
@@ -307,11 +304,22 @@ void Options::parse(int argc, wchar_t **argv)
   ("no-gaps", "Do not attempt to close gaps")
   ("no-defrag", "Do not attempt to defrag files")
   ;
+  po::options_description hidden("Hidden options");
+  hidden.add_options()
+  ("register-path", "Register in PATH")
+  ("unregister-path", "Unregister from PATH")
+  ("volume",
+   po::wvalue<std::wstring>(),
+   "Volume to defrag")
+  ;
+  po::options_description all("All options");
+  all.add(desc).add(hidden);
+
   po::positional_options_description p;
   p.add("volume", -1);
   po::variables_map vm;
   po::store(po::wcommand_line_parser(argc, argv).
-            options(desc).positional(p).run(), vm);
+            options(all).positional(p).run(), vm);
   po::notify(vm);
 
   if (vm.count("help")) {
@@ -363,6 +371,14 @@ void Options::parse(int argc, wchar_t **argv)
                << std::endl << util::clear;
 #endif
     std::wcout << std::endl;
+    throw Exit(0);
+  }
+  if (vm.count("register-path")) {
+    util::registerPath();
+    throw Exit(0);
+  }
+  if (vm.count("unregister-path")) {
+    util::unregisterPath();
     throw Exit(0);
   }
   if (vm.count("volume")) {

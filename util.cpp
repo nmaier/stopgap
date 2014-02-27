@@ -5,7 +5,48 @@
 #include "util.hpp"
 #include "resource.h"
 
+#include <algorithm>
 #include <codecvt>
+#include <iostream>
+
+namespace
+{
+const wchar_t *kEnviroment =
+  L"SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Environment";
+const wchar_t *kPath = L"PATH";
+
+static std::wstring getModuleDir()
+{
+  wchar_t file[MAX_PATH], dir[MAX_PATH], drive[5];
+  memset(dir, 0, sizeof(wchar_t) * MAX_PATH);
+  DWORD size = ::GetModuleFileName(nullptr, file, MAX_PATH);
+  if (!size) {
+    throw std::exception("Failed to get module path");
+  }
+  if (_wsplitpath_s(file, drive, 5, dir, MAX_PATH, nullptr, 0, nullptr, 0) ||
+      !*dir) {
+    throw std::exception("Failed to get dir name");
+  }
+  std::wstring rv(drive);
+  rv.append(dir);
+  rv.resize(rv.length() - 1);
+  return rv;
+}
+
+static std::wstring tolower(const std::wstring &str)
+{
+  std::wstring rv(str);
+  std::transform(rv.begin(), rv.end(), rv.begin(), ::towlower);
+  return rv;
+}
+
+static std::wstring toupper(const std::wstring &str)
+{
+  std::wstring rv(str);
+  std::transform(rv.begin(), rv.end(), rv.begin(), ::towupper);
+  return rv;
+}
+}
 
 namespace util
 {
@@ -164,4 +205,127 @@ const color_t green(FOREGROUND_GREEN | FOREGROUND_INTENSITY);
 const color_t blue(FOREGROUND_BLUE | FOREGROUND_INTENSITY);
 const color_t red(FOREGROUND_RED | FOREGROUND_INTENSITY);
 const color_t yellow(FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY);
+
+void registerPath()
+{
+  try {
+    std::wcout << L"Registering Path" << std::endl;
+    std::wstring path = getModuleDir();
+    std::wcout << L"Add: " << path << std::endl;
+    HKEY env = nullptr;
+    if (::RegCreateKeyEx(
+          HKEY_LOCAL_MACHINE,
+          kEnviroment,
+          0,
+          nullptr,
+          0,
+          KEY_ALL_ACCESS,
+          nullptr,
+          &env,
+          nullptr) != ERROR_SUCCESS) {
+      throw std::exception("Failed to open or create environment key");
+    }
+    DWORD len = 1 << 20;
+    DWORD type = REG_EXPAND_SZ;
+    std::unique_ptr<wchar_t[]> val(new wchar_t[len]);
+    LONG res = ::RegGetValue(env, nullptr, kPath,
+                             RRF_RT_REG_SZ | RRF_RT_REG_BINARY |
+                             RRF_RT_REG_EXPAND_SZ | RRF_RT_REG_MULTI_SZ |
+                             RRF_NOEXPAND, &type,
+                             val.get(), &len);
+    if (res == ERROR_MORE_DATA) {
+      throw std::exception("Buffer too small (unhandled)");
+    }
+    if (res != ERROR_SUCCESS) {
+      if (::RegSetValueEx(env, kPath, 0, REG_EXPAND_SZ, (BYTE *)path.c_str(),
+                          (path.length() + 1) * sizeof(wchar_t)) != ERROR_SUCCESS) {
+        throw std::exception("Failed to create value");
+      }
+      return;
+    }
+    std::wcout << L"Current: " << val.get() << std::endl;
+    std::wstring str(val.get());
+    std::wstring upath(toupper(path)), ustr(toupper(str));
+    if (ustr.find(upath) != std::wstring::npos) {
+      throw std::exception("Already present in PATH");
+    }
+    if (!str.empty()) {
+      str.append(L";");
+    }
+    str.append(path);
+    std::wcout << L"Setting: " << str << std::endl;
+    if (::RegSetValueEx(env, kPath, 0, REG_EXPAND_SZ, (BYTE *)str.c_str(),
+                        (str.length() + 1) * sizeof(wchar_t)) != ERROR_SUCCESS) {
+      throw std::exception("Failed to set value");
+    }
+  }
+  catch (const std::exception &ex) {
+    std::wcerr << to_wstring(ex.what()) << std::endl;
+    return;
+  }
+}
+void unregisterPath()
+{
+  try {
+    std::wcout << "Unregistering Path" << std::endl;
+    std::wstring path = getModuleDir();
+    std::wcout << L"Remove: " << path << std::endl;
+    HKEY env = nullptr;
+    if (::RegCreateKeyEx(
+          HKEY_LOCAL_MACHINE,
+          kEnviroment,
+          0,
+          nullptr,
+          0,
+          KEY_ALL_ACCESS,
+          nullptr,
+          &env,
+          nullptr) != ERROR_SUCCESS) {
+      throw std::exception("Failed to open or create environment key");
+    }
+    DWORD len = 1 << 20;
+    DWORD type = REG_EXPAND_SZ;
+    std::unique_ptr<wchar_t[]> val(new wchar_t[len]);
+    LONG res = ::RegGetValue(env, nullptr, kPath,
+                             RRF_RT_REG_SZ | RRF_RT_REG_BINARY |
+                             RRF_RT_REG_EXPAND_SZ | RRF_RT_REG_MULTI_SZ |
+                             RRF_NOEXPAND, &type,
+                             val.get(), &len);
+    if (res == ERROR_MORE_DATA) {
+      throw std::exception("Buffer too small (unhandled)");
+    }
+    if (res != ERROR_SUCCESS) {
+      throw std::exception("No PATH key");
+    }
+    std::wcout << L"Current: " << val.get() << std::endl;
+    path.append(L";");
+    std::wstring str(val.get());
+    std::wstring upath(toupper(path)), ustr(toupper(str));
+    auto pos = std::wstring::npos;
+    if ((pos = ustr.find(upath)) == std::wstring::npos) {
+      path.resize(path.length() - 1);
+      upath.resize(upath.length() - 1);
+      path = L";" + path;
+      upath = L";" + upath;
+      if ((pos = ustr.find(upath)) == std::wstring::npos) {
+        path = path.substr(1);
+        upath = upath.substr(1);
+        if ((pos = ustr.find(upath)) == std::wstring::npos) {
+          throw std::exception("Not present in PATH");
+        }
+      }
+    }
+    str = str.replace(pos, path.length(), L"");
+    std::wcout << L"Setting: " << str << std::endl;
+    if (::RegSetValueEx(env, kPath, 0, REG_EXPAND_SZ, (BYTE *)str.c_str(),
+                        (str.length() + 1) * sizeof(wchar_t)) != ERROR_SUCCESS) {
+      throw std::exception("Failed to set value");
+    }
+  }
+  catch (const std::exception &ex) {
+    std::wcerr << to_wstring(ex.what()) << std::endl;
+    return;
+  }
+}
+
 }
