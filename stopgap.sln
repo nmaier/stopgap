@@ -6,7 +6,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "stopgap", "stopgap.vcxproj"
 		{55E2B3AE-3CA1-4DB6-97F7-0A044D6F446F} = {55E2B3AE-3CA1-4DB6-97F7-0A044D6F446F}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libtcmalloc_minimal", "..\gperftools-2.1\vsprojects\libtcmalloc_minimal\libtcmalloc_minimal.vcxproj", "{55E2B3AE-3CA1-4DB6-97F7-0A044D6F446F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libtcmalloc_minimal", "gperftools\vsprojects\libtcmalloc_minimal\libtcmalloc_minimal.vcxproj", "{55E2B3AE-3CA1-4DB6-97F7-0A044D6F446F}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zenwinx", "zenwinx\zenwinx.vcxproj", "{F91D5C67-7B47-46E3-B38B-F68F91DF0669}"
 EndProject
