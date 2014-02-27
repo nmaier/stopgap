@@ -12,6 +12,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zenwinx", "zenwinx\zenwinx.
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{8CC8CEBF-7045-46EB-8690-C690E823040D}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Source", "Source\Source.vcxproj", "{1F813E76-AF40-4C22-BE30-5F64A8293D16}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -32,6 +34,9 @@ Global
 		{F91D5C67-7B47-46E3-B38B-F68F91DF0669}.Release|x64.Build.0 = Release|x64
 		{8CC8CEBF-7045-46EB-8690-C690E823040D}.Debug|x64.ActiveCfg = Debug
 		{8CC8CEBF-7045-46EB-8690-C690E823040D}.Release|x64.ActiveCfg = Release
+		{1F813E76-AF40-4C22-BE30-5F64A8293D16}.Debug|x64.ActiveCfg = Debug|x64
+		{1F813E76-AF40-4C22-BE30-5F64A8293D16}.Release|x64.ActiveCfg = Release|x64
+		{1F813E76-AF40-4C22-BE30-5F64A8293D16}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

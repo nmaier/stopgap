@@ -15,6 +15,12 @@
     {
         "Entry"
         {
+        "MsmKey" = "8:_29D2EBFE6D764100AD83121E4F98594B"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_2C35E208FDE547A4B14F70A1674DE517"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -29,6 +35,12 @@
         {
         "MsmKey" = "8:_909A739DBDAB3F5D0FB690DB44B74690"
         "OwnerKey" = "8:_D36C7449E3E74E6191BC1EDF2ECABEB8"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_AC3E1AFEB72E494CAFC71E2B239F63B0"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -57,12 +69,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_CDFCB00F1F0C4E09A6425C5BA55117BF"
-        "OwnerKey" = "8:_C28180FA3CEB4D5896ABB47E6BA733DB"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_D36C7449E3E74E6191BC1EDF2ECABEB8"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -75,8 +81,20 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_EF5B9540E7854AEAB9B41E1B3521255C"
+        "OwnerKey" = "8:_C28180FA3CEB4D5896ABB47E6BA733DB"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_C28180FA3CEB4D5896ABB47E6BA733DB"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_29D2EBFE6D764100AD83121E4F98594B"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -273,6 +291,26 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_AC3E1AFEB72E494CAFC71E2B239F63B0"
+            {
+            "SourcePath" = "8:..\\zenwinx\\LICENSE.TXT"
+            "TargetName" = "8:LICENSE.GPL"
+            "Tag" = "8:"
+            "Folder" = "8:_3102EB12B359493989EF4E086B12D25D"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BA88042962011C3F5F66E5058DA53AA6"
             {
             "SourcePath" = "8:libtcmalloc_minimal.dll"
@@ -424,7 +462,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:StopGap"
         "ProductCode" = "8:{00D84662-B9CE-4304-8D3A-C0C403FA07DC}"
-        "PackageCode" = "8:{348F3DFB-6704-48F1-9F36-224940C68160}"
+        "PackageCode" = "8:{3D166174-B40F-4A3E-8000-80567B919DD5}"
         "UpgradeCode" = "8:{AC65408E-C146-43CA-BA3A-8775E37B86C5}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -950,7 +988,7 @@
         }
         "MergeModule"
         {
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_CDFCB00F1F0C4E09A6425C5BA55117BF"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_EF5B9540E7854AEAB9B41E1B3521255C"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
@@ -967,9 +1005,9 @@
         }
         "ProjectOutput"
         {
-            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_1CA19B63B6274B7E874629BD0E8B3CD0"
+            "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_29D2EBFE6D764100AD83121E4F98594B"
             {
-            "SourcePath" = "8:"
+            "SourcePath" = "8:..\\x64\\Release\\Source.zip"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_3102EB12B359493989EF4E086B12D25D"
@@ -988,8 +1026,8 @@
             "IsolateTo" = "8:"
             "ProjectOutputGroupRegister" = "3:1"
             "OutputConfiguration" = "8:"
-            "OutputGroupCanonicalName" = "8:ContentFiles"
-            "OutputProjectGuid" = "8:{F8B3905F-AA13-48E4-8DFC-854F0F21013B}"
+            "OutputGroupCanonicalName" = "8:Built"
+            "OutputProjectGuid" = "8:{1F813E76-AF40-4C22-BE30-5F64A8293D16}"
             "ShowKeyOutput" = "11:TRUE"
                 "ExcludeFilters"
                 {
