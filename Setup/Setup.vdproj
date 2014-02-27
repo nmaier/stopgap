@@ -75,26 +75,20 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_E62FBDE2815541E4A5B5B967E37B6A19"
-        "OwnerKey" = "8:_C28180FA3CEB4D5896ABB47E6BA733DB"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_C28180FA3CEB4D5896ABB47E6BA733DB"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_D36C7449E3E74E6191BC1EDF2ECABEB8"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_29D2EBFE6D764100AD83121E4F98594B"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_D36C7449E3E74E6191BC1EDF2ECABEB8"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -174,7 +168,7 @@
         "DisplayName" = "8:Release-Signed"
         "IsDebugOnly" = "11:FALSE"
         "IsReleaseOnly" = "11:FALSE"
-        "OutputFilename" = "8:Release-Signed\\Setup.msi"
+        "OutputFilename" = "8:Release-Signed\\StopGap.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -994,20 +988,6 @@
         }
         "MergeModule"
         {
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_E62FBDE2815541E4A5B5B967E37B6A19"
-            {
-            "UseDynamicProperties" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
-            "SourcePath" = "8:Microsoft_VC100_CRT_x64.msm"
-                "Properties"
-                {
-                }
-            "LanguageId" = "3:0"
-            "Exclude" = "11:FALSE"
-            "Folder" = "8:"
-            "Feature" = "8:"
-            "IsolateTo" = "8:"
-            }
         }
         "ProjectOutput"
         {
