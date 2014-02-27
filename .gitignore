@@ -6,6 +6,7 @@
 *.user
 *.py
 Release/
+Release-Signed/
 Debug/
 x64/
 ipch/

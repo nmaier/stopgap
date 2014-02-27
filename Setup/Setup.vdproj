@@ -45,12 +45,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_BA88042962011C3F5F66E5058DA53AA6"
-        "OwnerKey" = "8:_D36C7449E3E74E6191BC1EDF2ECABEB8"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_BD406451D26919D3204EE89574659636"
         "OwnerKey" = "8:_D36C7449E3E74E6191BC1EDF2ECABEB8"
         "MsmSig" = "8:_UNDEFINED"
@@ -81,7 +75,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_EF5B9540E7854AEAB9B41E1B3521255C"
+        "MsmKey" = "8:_E62FBDE2815541E4A5B5B967E37B6A19"
         "OwnerKey" = "8:_C28180FA3CEB4D5896ABB47E6BA733DB"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -89,18 +83,18 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_C28180FA3CEB4D5896ABB47E6BA733DB"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_29D2EBFE6D764100AD83121E4F98594B"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_D36C7449E3E74E6191BC1EDF2ECABEB8"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_29D2EBFE6D764100AD83121E4F98594B"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -149,6 +143,38 @@
         "IsDebugOnly" = "11:FALSE"
         "IsReleaseOnly" = "11:TRUE"
         "OutputFilename" = "8:Release\\StopGap.msi"
+        "PackageFilesAs" = "3:2"
+        "PackageFileSize" = "3:-2147483648"
+        "CabType" = "3:1"
+        "Compression" = "3:3"
+        "SignOutput" = "11:FALSE"
+        "CertificateFile" = "8:"
+        "PrivateKeyFile" = "8:"
+        "TimeStampServer" = "8:"
+        "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:FALSE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                }
+            }
+        }
+        "Release-Signed"
+        {
+        "DisplayName" = "8:Release-Signed"
+        "IsDebugOnly" = "11:FALSE"
+        "IsReleaseOnly" = "11:FALSE"
+        "OutputFilename" = "8:Release-Signed\\Setup.msi"
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
@@ -311,26 +337,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BA88042962011C3F5F66E5058DA53AA6"
-            {
-            "SourcePath" = "8:libtcmalloc_minimal.dll"
-            "TargetName" = "8:libtcmalloc_minimal.dll"
-            "Tag" = "8:"
-            "Folder" = "8:_3102EB12B359493989EF4E086B12D25D"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:TRUE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_BD406451D26919D3204EE89574659636"
             {
             "SourcePath" = "8:ntdll.dll"
@@ -462,7 +468,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:StopGap"
         "ProductCode" = "8:{00D84662-B9CE-4304-8D3A-C0C403FA07DC}"
-        "PackageCode" = "8:{3D166174-B40F-4A3E-8000-80567B919DD5}"
+        "PackageCode" = "8:{14A03182-1C93-4CA2-9B20-E68C8C2861C6}"
         "UpgradeCode" = "8:{AC65408E-C146-43CA-BA3A-8775E37B86C5}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -485,7 +491,7 @@
         "UseSystemSearchPath" = "11:TRUE"
         "TargetPlatform" = "3:1"
         "PreBuildEvent" = "8:"
-        "PostBuildEvent" = "8:"
+        "PostBuildEvent" = "8:\"$(ProjectDir)\\sign.cmd\" \"$(BuiltOuputPath)\""
         "RunPostBuildEvent" = "3:0"
         }
         "Registry"
@@ -988,7 +994,7 @@
         }
         "MergeModule"
         {
-            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_EF5B9540E7854AEAB9B41E1B3521255C"
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_E62FBDE2815541E4A5B5B967E37B6A19"
             {
             "UseDynamicProperties" = "11:TRUE"
             "IsDependency" = "11:TRUE"
@@ -1007,7 +1013,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_29D2EBFE6D764100AD83121E4F98594B"
             {
-            "SourcePath" = "8:..\\x64\\Release\\Source.zip"
+            "SourcePath" = "8:..\\x64\\Release-Signed\\Source.zip"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_3102EB12B359493989EF4E086B12D25D"
@@ -1035,7 +1041,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_C28180FA3CEB4D5896ABB47E6BA733DB"
             {
-            "SourcePath" = "8:..\\x64\\Release\\libtcmalloc_minimal.dll"
+            "SourcePath" = "8:..\\x64\\Release-Signed\\stopgap.libtcmalloc_minimal.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_3102EB12B359493989EF4E086B12D25D"
@@ -1063,7 +1069,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_D36C7449E3E74E6191BC1EDF2ECABEB8"
             {
-            "SourcePath" = "8:..\\x64\\Release\\stopgap.exe"
+            "SourcePath" = "8:..\\x64\\Release-Signed\\stopgap.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_3102EB12B359493989EF4E086B12D25D"
